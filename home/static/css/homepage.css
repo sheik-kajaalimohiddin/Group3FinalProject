@@ -1,0 +1,97 @@
+
+body,html{
+    background-color: #daeef0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
+    margin: 0;
+}
+.navbar {
+    background-color: #4ac1f7;
+    margin: 0%;
+    padding: 0%;
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.title1 {
+    font-family: 'sans-serif';
+}
+
+.navbar-nav {
+    float: right;
+    text-align: right;
+}
+
+h1 {
+    color: chocolate;
+    margin-top: 10px;
+    }
+
+
+/*.homeh1 {*/
+/*    text-align: left;*/
+/*    font-size: larger;*/
+/*    margin-left:10px;*/
+/*}*/
+
+
+.section-2{
+    padding-left: 10%;
+}
+
+body {
+    margin: 0;
+}
+
+.section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.homeimage {
+    height: 300px;
+    width: 500px;
+}
+
+.homefeatured {
+    text-align: right;
+    margin-right: 430px;
+    margin-top: -400px;
+}
+
+.propertytext{
+    text-align: right;
+    margin-right: 530px;
+}
+.propertydetail{
+       text-align: right;
+    margin-right: 600px;
+}
+.propertytext1{
+      text-align: right;
+    margin-right: 460px;
+    margin-top: -75px;
+}
+.propertytext2{
+        text-align: right;
+    margin-right: 270px;
+    margin-top: -78px;
+}
+.btn-viewDetails {
+    background-color: #4ac1f7;
+    border: 0.5px #000000;
+    border-radius: 10px;
+    color: #000000;
+      }
+.text-box {
+    border: 2px solid #333;
+    background-color: #f5f5f5;
+    padding: 20px;
+    width: 400px;
+    height: auto;
+    margin: 20px auto;
+  }
+
+  h2 {
+    margin-top: 0;
+  }

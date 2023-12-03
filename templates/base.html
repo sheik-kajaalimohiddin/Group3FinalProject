@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CK Real Estate</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/homepage.css' %}" type="text/css">
+    <style>
+		.navbar-nav .nav-link {
+        color: black;
+        font-weight: bold;
+    }
+    </style>
+    <script>
+    function openEnquiryForm() {
+      document.getElementById("enquiryOverlay").style.display = "block";
+    }
+
+    function closeEnquiryForm() {
+      document.getElementById("enquiryOverlay").style.display = "none";
+    }
+  </script>
+</head>
+<body id="body" background="{% static 'img/ck_background.png' %} ">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top"">
+        <a class="navbar-brand" href="#"><img style="width: 60px"  src="{% static 'img/ck_logo.png' %}" alt="Logo"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home:home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home:listings' %}">Listings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home:property_search' %}">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home:profile' %}">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home:event' %}">Events</a>
+                </li>
+                {% if user.is_authenticated %}
+                <li><a class="nav-link" href="{% url 'home:generate_report' %}">Reports</a>
+                </li>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <li><a class="nav-link" href="{% url 'home:add_property' %}">Add Property</a>
+                     </li>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <li><a class="nav-link" href="{% url 'home:add_event' %}">Add Event</a>
+                     </li>
+                {% endif %}
+            </ul>
+
+
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+                <li><a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home:login' %}">Login</a>
+                </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </nav>
+
+{#    TODO: this is not currently a functional code, just a reference for future work.#}
+    {% block content %}
+{#      <h1>Welcome to the Home page!</h1>#}
+{#      <p>This is the home page of our site. You can navigate to other pages using the links below:</p>#}
+{#      <ul>#}
+{#        <li><a href="{% url 'home' %}">Home</a></li>#}
+{#        <li><a href="{% url 'login' %}">Login</a></li>#}
+{#        <li><a href="{% url 'logout' %}">Logout</a></li>#}
+{#        <li><a href="{% url 'register' %}">Register</a></li>#}
+{#      </ul>#}
+    {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+        <html lang="en">
+
+        <body>
+        <div><br/></div>
+        <div class="container">
+                    <div class="row">
+                        <div class="col-5 col-xl-5">
+                             <div>
+                                <div>
+
+                                    <h1> Find your Dream Home !!</h1>
+
+
+                                </div>
+                                 <div class="col-9" style="padding-bottom: 5%;">
+                                    <p style="font-weight: bold;font-size: 18px">CK Real Estate is a real estate company that specializes in selling and leasing residential and
+                                        commercial
+                                        properties. The company is based in the United States and has a team of expirienced real estate
+                                        professionals who are dedicated to providing excellent service to their client.</p>
+                                 </div>
+                                 <div class="col-9">
+                                    <P style="font-weight: bold; font-size: 18px">CK Real Estate is committed to providing personalized service to each of its clients. The company takes
+                                        the
+                                        time to understand the unique needs and goals of each client and works to develop a customized stratergy
+                                        to
+                                        help them achieve their real estate objectives. With a focus on building long-term relationships with
+                                        its
+                                        client, CK Real Estate is dedicated to providing exceptional service that exceeds expectations</p>
+                                 </div>
+                            </div>
+                        </div>
+            <div class="col-7" >
+                <div class="section-2">
+                                    <div>
+                                            <u><h2>
+                                                <span style="background-color: #cc9900; padding-right: 15px;color: black">Featured Property
+                                                </span>
+                                            </h2></u>
+                                    </div>
+
+                                        <img class="homeimage" src="{% if properties.property_image_main %}{{ properties.property_image_main.url }}
+                                                  {% else %}
+                                                    {% static "img/no_image.png" %}
+                                                  {% endif %}">
+{#                                    <img class="homeimage" src="{{ properties.property_image_main }}" alt="{{ property.name }}">#}
+                                    <p> <b>{{ properties.name }}</b></p>
+                                    <div>
+                                        <p>Price: ${{ properties.price }}</p>
+                                    </div>
+                                    <div>
+                                        <p>Bedrooms: {{ properties.bedrooms }}</p>
+                                        <p>Bathrooms: {{ properties.bathrooms }}</p></div>
+                                    <div>
+                                        <p>Square Feet: {{ properties.square_feet }}</p>
+                                        <p>Location : {{ properties.address }}</p>
+                                        <hr>
+                                    </div>
+{#                                {% endfor %}#}
+                        <a href="{% url 'home:details' properties.id%}">
+                            <button class="btn btn-lg btn-viewDetails" style="font-weight: bold">View Details</button>
+                        </a>
+                    </div>
+            </div>
+        </div>
+       </div>
+    </body>
+
+    </html>
+    </div>
+
+{% endblock %}
+

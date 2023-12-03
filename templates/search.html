@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+    <h1><b>Property Search</b></h1>
+select:disabled {
+  background-color: #f2f2f2;
+  color: #888;
+  cursor: not-allowed;
+}
+<style type="text/css">
+
+
+*{
+ margin: 0px;
+ padding: 0px;
+}
+body{
+ font-family: arial;
+}
+.main{
+
+ margin: 2%;
+}
+
+.card{
+     width: 15%;
+     display: inline-block;
+     box-shadow: 2px 2px 20px black;
+     border-radius: 5px;
+     margin: 2%;
+    }
+
+.image img{
+  width: 100%;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+
+ }
+
+
+
+.title{
+
+  text-align: center;
+  padding: 10px;
+
+ }
+
+h1{
+  font-size: 35px;
+ }
+
+.des{
+  padding: 3px;
+  text-align: center;
+
+  padding-top: 10px;
+        border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+button{
+  margin-top: 40px;
+  margin-bottom: 10px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding:10px;
+}
+button:hover{
+  background-color: black;
+  color: white;
+  transition: .5s;
+  cursor: pointer;
+}
+h1{
+  font-size: 20px;
+ }
+.btn-search {
+  position: relative;
+  top: -15px;
+    background-color: #4ac1f7;
+    border: 0.5px #000000;
+    border-radius: 10px;
+    color: #000000;/* adjust this value as per your requirement */
+}
+.add-property-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+.search-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+}
+
+.search-input {
+  margin-right: 20px;
+}
+label, select {
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+</style>
+
+</head>
+<form method="get" action="{% url 'home:property_search' %}">
+    <div class="search-container">
+        <div class="search-input">
+            <input type="radio" id="property_type_radio" name="search_type" value="property_type" onclick="disableDropdowns()">
+            <select id="property_type_dropdown" name="property_type">
+                <option value="">--Select a Property Type--</option>
+                {% for property_type in property_types %}
+                <option value="{{ property_type.id }}">{{ property_type.property_type_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="search-input">
+            <input type="radio" id="property_neighborhood_radio" name="search_type" value="property_neighborhood" onclick="disableDropdowns()">
+            <select id="property_neighborhood_dropdown" name="property_neighborhood">
+                <option value="">--Select a Neighborhood--</option>
+                {% for neighborhood in neighborhoods %}
+                <option value="{{ neighborhood.id }}">{{ neighborhood.property_neighborhood_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="search-input">
+            <input type="radio" id="property_price_range_radio" name="search_type" value="property_price_range" onclick="disableDropdowns()">
+            <select id="property_price_range_dropdown" name="property_price_range">
+                <option value="">--Select a Price Range--</option>
+                {% for price_range in price_ranges %}
+                <option value="{{ price_range.id }}">{{ price_range.property_price_range_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button class="btn btn-lg btn-search" style="height: 35px; font-weight: bold; display: flex; align-items: center" type="submit">Search</button>
+    </div>
+</form>
+
+<hr>
+
+{% for property in properties %}
+<div class="card">
+        <div class="image">
+            <img width="250" height="200" src="{{ property.property_image_main.url }}">
+        </div>
+    <div class="title">
+            <h1 class="property-name"><b>{{ property.name }}</b></h1>
+            <p class="property-price"><b>Price:</b> {{ property.price }}</p>
+            <p class="property-info"><b>Bedrooms:</b> {{ property.bedrooms }} | <b>Bathrooms:</b> {{ property.bathrooms }}</p>
+            <p class="property-address"> <b>Address: </b>{{ property.address }}</p>
+            <p class="property-status"><b>Status: </b> {{ property.status }}</p>
+            <div class="des">
+                <a href="{% url 'home:details' property.id%}">
+                    <button class="btn btn-lg btn-viewDetails" style="font-weight: bold">View Details</button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+<script>
+    function updateSelectedValue(selectedProperty, selectedNG, selectedPR) {
+      var dropdown = document.getElementById("property_type_dropdown");
+      for (var i = 0; i < dropdown.options.length; i++) {
+        if (dropdown.options[i].value == selectedProperty) {
+          dropdown.options[i].selected = true;
+          break;
+        }
+      }
+
+      var dropdown_neighbourhood = document.getElementById("property_neighborhood_dropdown");
+      for (var i = 0; i < dropdown_neighbourhood.options.length; i++) {
+        if (dropdown_neighbourhood.options[i].value == selectedNG) {
+          dropdown_neighbourhood.options[i].selected = true;
+          break;
+        }
+      }
+
+      var dropdown_PR = document.getElementById("property_price_range_dropdown");
+      for (var i = 0; i < dropdown_PR.options.length; i++) {
+        if (dropdown_PR.options[i].value == selectedPR) {
+          dropdown_PR.options[i].selected = true;
+          break;
+        }
+      }
+    }
+
+    window.onload = function() {
+			// Get the selected value from the Django view
+			var selectedValue = "{{ searched_property }}";
+            var selectedNG = "{{ searched_neighbourhood }}";
+            var selectedPR = "{{ searched_pricerange }}";
+			// Call the updateSelectedValue function to update the dropdown value
+			updateSelectedValue(selectedValue, selectedNG, selectedPR );
+		};
+</script>
+    <script>
+  function disableDropdowns() {
+    var propertyTypeRadio = document.getElementById("property_type_radio");
+    var propertyNeighborhoodRadio = document.getElementById("property_neighborhood_radio");
+    var propertyPriceRangeRadio = document.getElementById("property_price_range_radio");
+    var propertyTypeDropdown = document.getElementById("property_type_dropdown");
+    var propertyNeighborhoodDropdown = document.getElementById("property_neighborhood_dropdown");
+    var propertyPriceRangeDropdown = document.getElementById("property_price_range_dropdown");
+
+    if (propertyTypeRadio.checked) {
+      propertyTypeDropdown.disabled = false;
+      propertyNeighborhoodDropdown.disabled = true;
+      propertyPriceRangeDropdown.disabled = true;
+    } else if (propertyNeighborhoodRadio.checked) {
+      propertyTypeDropdown.disabled = true;
+      propertyNeighborhoodDropdown.disabled = false;
+      propertyPriceRangeDropdown.disabled = true;
+    } else if (propertyPriceRangeRadio.checked) {
+      propertyTypeDropdown.disabled = true;
+      propertyNeighborhoodDropdown.disabled = true;
+      propertyPriceRangeDropdown.disabled = false;
+    }
+  }
+</script>
+
+{% endblock %}

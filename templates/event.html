@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<html>
+<head>
+   <meta charset="UTF-8">
+   <title>Collapsible Sections</title>
+   <style>
+    {#    body {#}
+    {#        background-image: url({% static 'img/ck_background.png' %});#}
+    {#        background-repeat: no-repeat;#}
+    {#        background-size: cover;#}
+    {#        background-position: center;#}
+    {#}#}
+      .collapsible {
+            background-image: url({% static 'img/ck_background.png' %});
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: #444;
+         cursor: pointer;
+         padding: 18px;
+         width: 100%;
+         border: none;
+         text-align: left;
+         outline: none;
+         font-size: 15px;
+            margin-top: 20px;
+            font-weight: bold;
+      }
+
+      .active, .collapsible:hover {
+         background-color: #ccc;
+      }
+
+      .collapsible:after {
+         content: '\002B';
+         color: #777;
+         font-weight: bold;
+         float: right;
+         margin-left: 5px;
+      }
+
+      .active:after {
+         content: "\2212";
+      }
+
+      .content {
+         background-image: url({% static 'img/ck_background.png' %});
+            background-repeat: no-repeat;
+            background-size: cover;
+            padding: 0 18px;
+         max-height: 0;
+         overflow: auto;
+         transition: max-height 0.2s ease-out;
+         background-color: #f1f1f1;
+      }
+
+      .content figure {
+         display: flex;
+         align-items: center;
+         margin-bottom: 20px;
+      }
+
+      .content figure img {
+         flex: 0 0 auto;
+         width: 200px;
+         height: auto;
+         margin-right: 20px;
+      }
+
+      .content figure figcaption {
+         flex: 1 1 auto;
+      }
+
+        .places-to-eat {
+            font-weight: bold;
+            color: black;
+        }
+   </style>
+</head>
+<body>
+   <button class="collapsible">Events</button>
+
+   <div class="content">
+        {% for event in events %}
+      <figure>
+           <img src="{{ event.picture.url }}">
+           <figcaption>{{event.description}}</figcaption>
+        </figure>
+        {% endfor %}
+   </div>
+   <button class="collapsible">Places to Visit</button>
+   <div class="content">
+         <figure>
+      <img src="{% static 'img/henry.jpeg' %}" alt="Image 1">
+      <figcaption>Henry Doorly Zoo and Aquarium-South Omaha</figcaption>
+    </figure>
+               <figure>
+      <img src="{% static 'img/children.jpeg' %}" alt="Image 2">
+      <figcaption>Omaha Children's Museum</figcaption>
+    </figure>
+              <figure>
+      <img src="{% static 'img/forest.jpeg' %}" alt="Image 3">
+      <figcaption>Fontenelle Forest</figcaption>
+              </figure>
+   </div>
+   </div>
+   <button class="collapsible">Family Activities</button>
+   <div class="content">
+      <figure>
+      <img src="{% static 'img/old.jpeg' %}" alt="Image 1">
+      <figcaption>The Old Market is known for its unique blend of old and new, with many of the historic buildings having been converted into trendy restaurants, bars, and boutiques. It is also home to several art galleries and theaters, as well as the popular Omaha Farmers Market</figcaption>
+    </figure>
+        <figure>
+      <img src="{% static 'img/oppd.jpeg' %}" alt="Image 2">
+      <figcaption>The OPPD Arboretum is a public park and arboretum located in Omaha.The OPPD Arboretum features a variety of trees, shrubs, and other plant species that are native to the region, as well as several walking paths and nature trails. The park is open to the public and offers a peaceful retreat from the city's urban environment.</figcaption>
+    </figure>
+              <figure>
+      <img src="{% static 'img/gene.jpeg' %}" alt="Image 3">
+      <figcaption>Gene Leahy Mall is a public park located in the heart of downtown Omaha, Nebraska. The park covers 9.6 acres and features a large lagoon, a walking path, a playground, and a variety of public art installations.he centerpiece of Gene Leahy Mall is its lagoon, which is surrounded by a walking path that provides scenic views of the water and the surrounding cityscape</figcaption>
+    </figure>
+   </div>
+   <button class="collapsible">Places to Eat</button>
+   <div class="content">
+      <figure>
+      <img src="{% static 'img/jony.jpeg' %}" alt="Image 1">
+      <figcaption>Johnny's Cafe is a historic steakhouse located in Omaha. It has been serving traditional American cuisine since 1922 and has become a local institution known for its classic menu and warm atmosphere.</figcaption>
+    </figure>
+               <figure>
+      <img src="{% static 'img/persis.jpeg' %}" alt="Image 2">
+      <figcaption>Persis Indian Grill is a restaurant located in Omaha that specializes in authentic Indian cuisine. The restaurant offers a variety of dishes that represent the diverse culinary traditions of India</figcaption>
+    </figure>
+              <figure>
+      <img src="{% static 'img/lepeep.jpeg' %}" alt="Image 3">
+      <figcaption>Le Peep is a breakfast and brunch restaurant chain with a location in Omaha, Nebraska, USA. It is known for its breakfast dishes, including omelets, pancakes, waffles, and crepes</figcaption>
+              </figure>
+   </div>
+   <script>
+        const coll = document.getElementsByClassName("collapsible");
+        let i;
+
+        for (i = 0; i < coll.length; i++) {
+         coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                if (content.style.maxHeight){
+               content.style.maxHeight = null;
+            } else {
+               content.style.maxHeight = content.scrollHeight + "px";
+            }
+         });
+      }
+   </script>
+</body>
+{% endblock %}

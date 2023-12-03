@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Event</title>
+  <style>
+    label {
+      font-weight: bold;
+        padding-left: 30px;
+        padding-top: 2px;
+    }
+    h1{
+        font-size: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Add Event</h1>
+  <form method="POST" enctype="multipart/form-data" class="my-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-lg btn-viewDetails" type="submit" value="Submit">
+  </form>
+</body>
+</html>
+{% endblock %}

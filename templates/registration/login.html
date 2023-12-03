@@ -1,0 +1,172 @@
+{% load static %}
+{#{% block content %}#}
+{#<h2>Login</h2>#}
+{#{% if error_message %}#}
+{#<p class="error">{{ error_message }}</p>#}
+{#{% endif %}#}
+{#<form method="post">#}
+{#  {% csrf_token %}#}
+{#  <div class="form-group">#}
+{#    <label for="username">Username:</label>#}
+{#    <input type="text" id="username" name="username">#}
+{#  </div>#}
+{#  <div class="form-group">#}
+{#    <label for="password">Password:</label>#}
+{#    <input type="password" id="password" name="password">#}
+{#  </div>#}
+{#  <button type="submit">Login</button>#}
+{#</form>#}
+{#{% endblock %}#}
+{#<body style="background-image: url('{% static 'img/ck_background.png' %}');">#}
+{#  <div class="login-form">#}
+{#    <h2>Login</h2>#}
+{#    <form method="post">#}
+{#      {% csrf_token %}#}
+{#      <div class="form-group">#}
+{#        <label for="username">Username:</label>#}
+{#        <input type="text" id="username" name="username">#}
+{#      </div>#}
+{#      <div class="form-group">#}
+{#        <label for="password">Password:</label>#}
+{#        <input type="password" id="password" name="password">#}
+{#      </div>#}
+{#      <button type="submit">Login</button>#}
+{#    </form>#}
+{#  </div>#}
+{##}
+{#  <style>#}
+{#    body {#}
+{#      background-size: cover;#}
+{#      background-position: center;#}
+{#    }#}
+{#    .login-form {#}
+{#      width: 400px;#}
+{#      margin: 0 auto;#}
+{#      background-color: #fff;#}
+{#      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);#}
+{#      border-radius: 5px;#}
+{#      padding: 20px;#}
+{#    }#}
+{#    h2 {#}
+{#      margin-top: 0;#}
+{#    }#}
+{#    .form-group {#}
+{#      margin-bottom: 20px;#}
+{#    }#}
+{#    label {#}
+{#      display: block;#}
+{#      margin-bottom: 5px;#}
+{#      font-size: 18px;#}
+{#      font-weight: bold;#}
+{#    }#}
+{#    input[type="text"],#}
+{#    input[type="password"] {#}
+{#      width: 100%;#}
+{#      padding: 10px;#}
+{#      font-size: 16px;#}
+{#      border: 1px solid #ddd;#}
+{#      border-radius: 5px;#}
+{#      box-sizing: border-box;#}
+{#    }#}
+{#    button[type="submit"] {#}
+{#      display: block;#}
+{#      width: 100%;#}
+{#      padding: 10px;#}
+{#      background-color: #008CBA;#}
+{#      color: #fff;#}
+{#      border: none;#}
+{#      border-radius: 5px;#}
+{#      font-size: 16px;#}
+{#      cursor: pointer;#}
+{#    }#}
+{#    button[type="submit"]:hover {#}
+{#      background-color: #0077A3;#}
+{#    }#}
+{#  </style>#}
+{#</body>#}
+<body style="background-image: url('{% static 'img/ck_background.png' %}');">
+  <div class="login-form">
+    <h2>Login</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <span class="error" id="username_error"></span>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <span class="error" id="password_error"></span>
+      </div>
+      <button type="submit" onclick="return validate()">Login</button>
+    </form>
+  </div>
+
+  <style>
+    body {
+      background-size: cover;
+      background-position: center;
+    }
+    .login-form {
+      width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      border-radius: 5px;
+      padding: 20px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    button[type="submit"] {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #008CBA;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button[type="submit"]:hover {
+      background-color: #0077A3;
+    }
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+  </style>
+
+  {% if request.method == "POST" %}
+    {% if not form.is_valid %}
+      {% if form.errors.username %}
+        <script>document.getElementById("username_error").innerHTML = "{{ form.errors.username }}";</script>
+      {% endif %}
+      {% if form.errors.password %}
+        <script>document.getElementById("password_error").innerHTML = "{{ form.errors.password }}";</script>
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</body>
+
+

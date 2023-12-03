@@ -1,0 +1,26 @@
+{% block content %}
+<div id="enquiryForm" style="background-color: #7a8ea6;padding: 20px; width: 400px; margin: 0 auto;">
+
+  <form>
+    <input type="text" id="fname" name="firstname" placeholder="First Name.."><br><br>
+
+    <input type="text" id="lname" name="lastname" placeholder="Last Name.."><br><br>
+
+    <input type="text" name="Email" placeholder="Email.."><br><br>
+
+    <textarea id="subject" name="subject" placeholder="Enter your message here.." style="height:170px"></textarea><br><br>
+
+    <button class="btn btn-lg btn-viewDetails" type="button" onclick="submitForm()">Submit</button><br><br>
+  </form>
+</div>
+
+
+
+<script>
+
+function submitForm() {
+  alert('Thanks for sending details, we will reach out to you soon.');
+  window.location.href = "{% url 'home:profile' %}";
+}
+</script>
+{% endblock %}

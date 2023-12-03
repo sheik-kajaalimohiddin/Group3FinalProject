@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <style>
+        .image-container {
+            display: flex; /* Use flexbox to create a flexible container */
+            justify-content: center; /* Center-align the images horizontally */
+            align-items: flex-start; /* Align the images to the top */
+            flex-wrap: wrap; /* Allow wrapping of images to multiple lines if needed */
+        }
+
+        .image-container img {
+            flex: 0 0 200px; /* Set a fixed width and height for each image */
+            height: 200px;
+            margin: 10px;
+            margin-right: 20px;
+        }
+
+        .container {
+            display: grid; /* Use grid layout to arrange the columns */
+            grid-template-columns: 1fr 1fr; /* Two equal columns */
+            justify-items: center; /* Center-align the items horizontally */
+            gap: 10px;
+            max-width: 1000px; /* Add some gap between the columns */
+            margin: 0 auto;
+        }
+
+        .box:last-child {
+            margin-right: 0;
+        }
+
+        .box {
+            padding: 10px; /* Add some padding to the boxes */
+            line-height: 15px;
+            font-weight: bold;
+        }
+
+        .box.left-box {
+            grid-column: 1 / span 2; /* Place the left box in the first column */
+
+        }
+
+        .box.right-box {
+            grid-column: 3 / span 2; /* Place the right box in the second column */
+        }
+
+        .button-container {
+            display: flex; /* Use flexbox to align the buttons */
+            justify-content: left; /* Align buttons with space between them */
+            margin-top: 20px;
+            margin-left: 500px /* Add some margin to separate from the boxes */
+        }
+
+        .button-container button {
+            flex: 0 0 auto;
+            margin-right: 200px; /* Prevent buttons from growing or shrinking */
+        }
+
+        .container {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              /* other styles */
+            }
+
+        .actions {
+              display: flex;
+            }
+
+        .actions a,
+        .actions button {
+              margin-left: 150px; /* Add some space between the link and the button */
+            }
+
+    </style>
+    <div class="image-container">
+        <div class="col-2">
+            {% if details.property_image_main %}
+                <img src="{{ details.property_image_main.url }}" style="width: 230px; height: 200px">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" style="width: 300px; height: 200px">
+            {% endif %}
+        </div>
+        <div class="col-2">
+            {% if details.property_image_1 %}
+                <img src="{{ details.property_image_1.url }}" style="width: 230px; height: 200px">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" style="width: 300px; height: 200px">
+            {% endif %}
+        </div>
+        <div class="col-2">
+            {% if details.property_image_2 %}
+                <img src="{{ details.property_image_2.url }}" style="width: 230px; height: 200px">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" style="width: 300px; height: 200px">
+            {% endif %}
+        </div>
+        <div class="col-2">
+            {% if details.property_image_3 %}
+                <img src="{{ details.property_image_3.url }}" style="width: 230px; height: 200px">
+            {% else %}
+                <img src="{% static 'img/default.png' %}" style="width: 300px; height: 200px">
+            {% endif %}
+        </div>
+    </div>
+    <br>
+    <div class="container">
+        <div class="box left-box">
+            <h5><b>Description: {{ details.description }}</b></h5><br><br>
+            <h5><b>Name: {{ details.name }}</b></h5><br><br>
+            <h5><b>Status : {{ details.status }}</b></h5><br><br>
+            <h5><b>Address : {{ details.address }}</b></h5><br><br>
+            <h5><b>Number of Bedrooms: {{ details.bedrooms }}</b></h5><br><br>
+            <h5><b>Size in sqft: {{ details.square_feet }}</b></h5><br><br><br>
+
+        </div>
+        <div class="box right-box">
+            <h5><b>Property type: {{ details.property_type }}</b></h5><br><br>
+            <h5><b>Property Neighborhood: {{ details.property_neighborhood }}</b></h5><br><br>
+            <h5><b>Price: ${{ details.price }}</b></h5><br><br>
+            <h5><b>Number of Bathrooms: {{ details.bathrooms }}</b></h5><br><br>
+            <h5><b>Featured Property: {{ details.featured_property }}</b></h5><br><br><br>
+        </div>
+    </div>
+    <div class="container">
+        <div class="actions">
+            <a href="#" onclick="openEnquiryForm()">
+                <button class="btn btn-lg btn-viewDetails" style="font-weight: bold;background-color: #e5a87a;">Enquire
+                    about Property
+                </button>
+            </a>
+        </div>
+        <div class="actions">
+            <a href="{% url 'home:listings' %}">
+                <button class="btn btn-lg btn-viewDetails" style="font-weight: bold">Back</button>
+            </a>
+        </div>
+    </div>
+    <div id="enquiryOverlay"
+         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: #fff; padding: 20px;">
+            <a href="#" onclick="closeEnquiryForm()">Close</a>
+            {% include 'enquire.html' %}
+        </div>
+    </div>
+    {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'home:edit_property' details.id %}"
+           style="position: absolute; top: 70px; right: 10px;">
+        <button style="font-weight: bold">Edit Property</button>
+
+        <form action="{% url 'home:remove_listing' details.id %}" method="POST" style="display: inline">
+            {% csrf_token %}
+            <button style="font-weight: bold; background-color: red;"
+                    onclick="return confirm('Are you sure you want to remove the listing from the page?')">Remove
+                Listing
+            </button>
+        </form>
+
+    {% endif %}
+
+{% endblock %}

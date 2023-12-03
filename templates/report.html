@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        label {
+            display: inline-block;
+            margin: 0 10px 10px 20px;
+            width: 150px;
+        }
+
+        select {
+            width: 250px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        th, td {
+            border: 2px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #cdcbe3;
+        }
+    </style>
+
+    <br>
+    <br>
+    <form method="GET" action="{% url 'home:generate_report' %}">
+        <label for="report_type" style="width:200px"><b>Select Search report by:</b></label>
+        <select name="report_type" id="report_type">
+            <option value="property_type">Property Type</option>
+            <option value="neighborhood_type">Neighborhood Type</option>
+            <option value="price_range_type">Price Range Type</option>
+        </select>
+
+        <label for="month" style="width:100px"><b>Month:</b></label>
+        <select name="month" id="month">
+            <option value="01">Jan</option>
+            <option value="02">Feb</option>
+            <option value="03">Mar</option>
+            <option value="04">Apr</option>
+            <option value="05">May</option>
+            <option value="06">Jun</option>
+        </select>
+
+        <label for="year" style="width:100px"><b>Year:</b></label>
+        <select name="year" id="year">
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+        </select>
+
+       &nbsp;&nbsp; <button type="submit"><b>Generate Report</b></button>
+    </form>
+    <br>
+    <br>
+    {% if results %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Property Type</th>
+                    <th>Neighborhood</th>
+                    <th>Price Range</th>
+                    <th>Total Hit Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.property_type__property_type_name }}</td>
+                        <td>{{ result.property_neighborhood__property_neighborhood_name }}</td>
+                        <td>{{ result.property_type_price_range__property_price_range_name }}</td>
+                        <td>{{ result.count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p><b>No results found.</b></p>
+    {% endif %}
+{% endblock %}

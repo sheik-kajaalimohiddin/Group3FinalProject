@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html>
+
+ <title>Cards</title>
+</head>
+
+<style type="text/css">
+
+
+*{
+ margin: 0px;
+ padding: 0px;
+}
+body{
+ font-family: arial;
+}
+.main{
+
+ margin: 2%;
+}
+
+.card{
+     width: 15%;
+     display: inline-block;
+     box-shadow: 2px 2px 20px black;
+     border-radius: 5px;
+     margin: 2%;
+    }
+
+.image img{
+  width: 100%;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+
+ }
+
+
+
+.title{
+
+  text-align: center;
+  padding: 10px;
+
+ }
+
+h1{
+  font-size: 20px;
+ }
+
+.des{
+  padding: 3px;
+  text-align: center;
+
+  padding-top: 10px;
+        border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+button{
+  margin-top: 40px;
+  margin-bottom: 10px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding:10px;
+}
+button:hover{
+  background-color: black;
+  color: white;
+  transition: .5s;
+  cursor: pointer;
+}
+/* Style for the "Add Property" button */
+.add-property-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+</style>
+
+ <body background="bg.png">
+
+<div class="main">
+
+    <!--cards -->
+  {% for listing in listings %}
+    <div class="card">
+        <div class="image">
+            <img width="250" height="200" src="{{ listing.property_image_main.url }}">
+        </div>
+        <div class="title">
+            <h1 class="property-name"><b>{{ listing.name }}</b></h1>
+            <p class="property-price"><b>Price:</b> {{ listing.price }}</p>
+            <p class="property-info"><b>Bedrooms:</b> {{ listing.bedrooms }} | <b>Bathrooms:</b> {{ listing.bathrooms }}</p>
+            <p class="property-address"> <b>Address: </b>{{ listing.address }}</p>
+            <p class="property-status"><b>Status: </b> {{ listing.status }}</p>
+            <div class="des">
+                <a href="{% url 'home:details' listing.id%}">
+                    <button class="btn btn-lg btn-viewDetails" style="font-weight: bold">View Details</button>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+</body>
+</html>
+
+{% endblock %}
