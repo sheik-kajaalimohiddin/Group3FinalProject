@@ -12,16 +12,15 @@ Parameters:
   KeyName:
     Description: Name of an existing EC2 key pair to allow SSH access to the instances
     Type: 'AWS::EC2::KeyPair::KeyName'
-    Default: 
   ImageId:
     Type: 'AWS::EC2::Image::Id'
-    Default: ami-0dbc3d7bc646e8516
+    Default: ami-0230bd60aa48260c6
 
 Description: >
   Hi, this is a demo template for creating a nodejs server on a ec2
 Resources:
   # creating VPC
-  MyTestVpc:
+  FinalProjectVpc:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/16
@@ -29,65 +28,65 @@ Resources:
       EnableDnsHostnames: 'true'
       Tags:
         - Key: Name
-          Value: MyTestVpc
+          Value: FinalProjectVpc
 
   # creating internet gateway (IGW) for the VPC
-  MyTestIgw:
+  FinalProjectIgw:
     Type: "AWS::EC2::InternetGateway"
     Properties:
       Tags:
         - Key: Name
-          Value: my-test-igw
+          Value: final-project-igw
 
   # connects IGW with VPC
-  MyTestAttachIgw:
+  FinalProjectAttachIgw:
     Type: "AWS::EC2::VPCGatewayAttachment"
     Properties:
-      VpcId: !Ref MyTestVpc
-      InternetGatewayId: !Ref MyTestIgw
+      VpcId: !Ref FinalProjectVpc
+      InternetGatewayId: !Ref FinalProjectIgw
 
   # create a public subnet
-  MyTestVpcSubnet:
+  FinalProjectVpcSubnet:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref MyTestVpc
+      VpcId: !Ref FinalProjectVpc
       CidrBlock: 10.0.0.0/24
       Tags:
         - Key: Name
-          Value: my-test-vpc-public-subnet
+          Value: final-project-vpc-public-subnet
 
 
   # create a route table
-  MyTestPublicRouteTable:
+  FinalProjectPublicRouteTable:
     Type: "AWS::EC2::RouteTable"
     Properties:
-      VpcId: !Ref MyTestVpc
+      VpcId: !Ref FinalProjectVpc
       Tags:
         - Key: Name
-          Value: my-test-public-route-table
+          Value: Final-Project-public-route-table
 
   # associate the route table to the public subnet
-  MyTestRouteTableAssociation:
+  FinalProjectRouteTableAssociation:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      RouteTableId: !Ref MyTestPublicRouteTable
-      SubnetId: !Ref MyTestVpcSubnet
+      RouteTableId: !Ref FinalProjectPublicRouteTable
+      SubnetId: !Ref FinalProjectVpcSubnet
 
   # add a route entry to IGW into route table
-  MyTestInternetRoute:
+  FinalProjectInternetRoute:
     Type: "AWS::EC2::Route"
     Properties:
-      RouteTableId: !Ref MyTestPublicRouteTable
+      RouteTableId: !Ref FinalProjectPublicRouteTable
       DestinationCidrBlock: 0.0.0.0/0
-      GatewayId: !Ref MyTestIgw
+      GatewayId: !Ref FinalProjectIgw
 
   # create security group
-  MyTestVpcSg:
+  FinalProjectVpcSg:
     Type: AWS::EC2::SecurityGroup
-    DependsOn: MyTestVpc
+    DependsOn: FinalProjectVpc
     Properties:
       GroupDescription: SG to test ping
-      VpcId: !Ref MyTestVpc
+      VpcId: !Ref FinalProjectVpc
       SecurityGroupIngress:
         # 22 is for ssh
         - IpProtocol: tcp
@@ -95,14 +94,14 @@ Resources:
           ToPort: 22
           CidrIp: 0.0.0.0/0
         # icmp is for ping (a network testing program)
-        - IpProtocol: icmp
-          FromPort: -1
-          ToPort: -1
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
           CidrIp: 0.0.0.0/0
         # 3000 is for next-js webapp
         - IpProtocol: tcp
-          FromPort: 3000
-          ToPort: 3000
+          FromPort: 8000
+          ToPort: 8000
           CidrIp: 0.0.0.0/0
         # 80 is for http
         - IpProtocol: tcp
@@ -114,7 +113,7 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
-  MyTestEc2Instance:
+  FinalProjectEc2Instance:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !Ref ImageId
@@ -124,39 +123,75 @@ Resources:
         - AssociatePublicIpAddress: true
           DeviceIndex: 0
           GroupSet:
-            - Ref: MyTestVpcSg
-          SubnetId: !Ref MyTestVpcSubnet
+            - Ref: FinalProjectVpcSg
+          SubnetId: !Ref FinalProjectVpcSubnet
       UserData:
         Fn::Base64:
           |
           #!/bin/bash 
           set -ex
-          yum install update -y 
-          yum install git -y &> /dev/null
-          yum install nodejs -y &> /dev/null
-          git clone https://github.com/UNOCourseDemo/Demo.git &> /dev/null
-          cd Demo
-          npm i &> /dev/null
-          npm i pm2 -g &> /dev/null
-          npx prisma migrate reset --force &> /dev/null
-          npx prisma migrate dev --name init &> /dev/null
-          npm run build &> /dev/null
-          pm2 start npm -- start &> /dev/null
+          sudo yum install python -y &> /dev/null
+          sudo yum install git -y &> /dev/null
+          sudo yum install pip -y &> /dev/null
+          sudo pip install virtualenv &> /dev/null
+          pip install --upgrade pip &> /dev/null
+          DIR1="eb-virt"
+          if [ -d "DIR1" ];
+          then
+              source ~/eb-virt/bin/activate
+              pip install Django &> /dev/null
+              pip install django-crispy-forms &> /dev/null
+              python -m pip install Pillow &> /dev/null
+              pip install bootstrap &> /dev/null
+              pip install psycopg2-binary &> /dev/null
+              sudo dnf install -y pip &> /dev/null
+              sudo dnf install -y mariadb105-devel gcc python3-devel &> /dev/null
+              pip install mysqlclient &> /dev/null
+          else
+              virtualenv ~/eb-virt &> /dev/null
+              source ~/eb-virt/bin/activate
+              pip install Django &> /dev/null
+              pip install django-crispy-forms &> /dev/null
+              python -m pip install Pillow &> /dev/null
+              pip install bootstrap &> /dev/null
+              pip install psycopg2-binary &> /dev/null
+              sudo dnf install -y pip &> /dev/null
+              sudo dnf install -y mariadb105-devel gcc python3-devel &> /dev/null
+              pip install mysqlclient &> /dev/null
+          fi
+        
+          DIR=" Group3FinalProject"
+        
+          if [ -d "$DIR" ];
+          then
+              rm -rf  Group3FinalProject/
+              git clone https://github.com/sheik-kajaalimohiddin/Group3FinalProject.git &> /dev/null
+              cd  Group3FinalProject/
+              python manage.py makemigrations &> /dev/null
+              python manage.py migrate &> /dev/null
+              python manage.py runserver 0.0.0.0:8000 &> /dev/null
+          else
+              git clone https://github.com/sheik-kajaalimohiddin/Group3FinalProject.git &> /dev/null
+              cd  Group3FinalProject/
+              python manage.py makemigrations &> /dev/null
+              python manage.py migrate &> /dev/null
+              python manage.py runserver 0.0.0.0:8000 &> /dev/null
+          fi
           EOF
 
 Outputs:
-  MyTestVpc:
-    Description: MyTestVpc
-    Value: !Ref MyTestVpc
+  FinalProjectVpc:
+    Description: FinalProjectVpc
+    Value: !Ref FinalProjectVpc
     Export:
-      Name: MyTestVpc-ID
+      Name: FinalProjectVpc-ID
   WebsiteURL:
     Description: URL for newly created nextjs app
     Value: !Join
       - ''
       - - 'http://'
         - !GetAtt
-          - MyTestEc2Instance
+          - FinalProjectEc2Instance
           - PublicDnsName
-        - ':3000'
+        - ':8000'
 
